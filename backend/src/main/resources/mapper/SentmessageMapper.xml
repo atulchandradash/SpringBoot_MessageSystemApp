@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.backend.mapper.SentmessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.backend.Entities.Sentmessage">
+            <id property="messageid" column="messageID" jdbcType="INTEGER"/>
+            <result property="senderid" column="senderID" jdbcType="INTEGER"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="userid" column="userID" jdbcType="INTEGER"/>
+            <result property="createat" column="createAt" jdbcType="TIMESTAMP"/>
+            <result property="updateat" column="updateAt" jdbcType="TIMESTAMP"/>
+            <association property="usersinfo" javaType="com.example.backend.Entities.Users">
+                <id property="userid" column="UserID" />
+                <result property="username" column="username"/>
+                <result property="departmentname" column="departmentName"/>
+            </association>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        messageID,senderID,message,
+        userID,createAt,updateAt
+    </sql>
+
+
+    <!-- SendmessageMapper.xml -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            sm.message,
+            sm.senderid,
+            sm.createAt,
+            sm.userID,
+            u.username,
+            u.departmentName
+        FROM
+            sentmessage sm
+                INNER JOIN
+            users u ON sm.senderId = u.UserID WHERE sm.userID = #{id} ORDER BY sm.createAt DESC;
+    </select>
+</mapper>
